@@ -1,0 +1,411 @@
+import { useState, useEffect } from "react";
+import { Light as SyntaxHighlighter } from "react-syntax-highlighter";
+import { docco } from "react-syntax-highlighter/dist/esm/styles/hljs";
+import { motion, AnimatePresence } from "framer-motion";
+import javaArrays from "./Topic/array.js";
+import javaHibernate from "./Topic/hibernate-intro.js";
+import strings from "./Topic/strings.js";
+
+// Topics mapping with IDs as keys
+const topics = {
+  "java-arrays": javaArrays,
+  "java-hibernate": javaHibernate,
+  "java-strings": strings,
+};
+
+// UI Components
+const Badge = ({ level = "beginner" }) => {
+  const colors = {
+    beginner:
+      "bg-emerald-100 text-emerald-800 dark:bg-emerald-900/20 dark:text-emerald-300",
+    intermediate:
+      "bg-amber-100 text-amber-800 dark:bg-amber-900/20 dark:text-amber-300",
+    advanced:
+      "bg-rose-100 text-rose-800 dark:bg-rose-900/20 dark:text-rose-300",
+  };
+
+  return (
+    <span
+      className={`px-3 py-1 text-xs font-medium rounded-full ${colors[level]}`}
+    >
+      {level.charAt(0).toUpperCase() + level.slice(1)}
+    </span>
+  );
+};
+
+const CopyButton = ({ text }) => {
+  const [copied, setCopied] = useState(false);
+
+  const handleCopy = () => {
+    navigator.clipboard.writeText(text);
+    setCopied(true);
+    setTimeout(() => setCopied(false), 2000);
+  };
+
+  return (
+    <button
+      onClick={handleCopy}
+      className="absolute top-2 right-2 p-1.5 rounded-md bg-white/90 backdrop-blur shadow-sm hover:bg-gray-50 transition-all dark:bg-gray-800/80 dark:hover:bg-gray-700/80"
+      aria-label="Copy code"
+    >
+      <AnimatePresence mode="wait">
+        {copied ? (
+          <motion.span
+            key="copied"
+            initial={{ opacity: 0, y: 5 }}
+            animate={{ opacity: 1, y: 0 }}
+            exit={{ opacity: 0, y: -5 }}
+            className="text-xs font-medium text-emerald-600 dark:text-emerald-400"
+          >
+            Copied!
+          </motion.span>
+        ) : (
+          <motion.span
+            key="copy"
+            initial={{ opacity: 0, y: 5 }}
+            animate={{ opacity: 1, y: 0 }}
+            exit={{ opacity: 0, y: -5 }}
+            className="text-gray-500 hover:text-gray-700 dark:text-gray-400 dark:hover:text-gray-200"
+          >
+            ⎘
+          </motion.span>
+        )}
+      </AnimatePresence>
+    </button>
+  );
+};
+
+const CodeBlock = ({ language, code, explanation }) => (
+  <motion.div
+    initial={{ opacity: 0, y: 10 }}
+    animate={{ opacity: 1, y: 0 }}
+    transition={{ duration: 0.3 }}
+    className="my-6 group relative"
+  >
+    <div className="rounded-xl overflow-hidden border border-gray-200 bg-gray-50 dark:border-gray-700 dark:bg-gray-800">
+      <div className="relative">
+        <SyntaxHighlighter
+          language={language}
+          style={docco}
+          customStyle={{
+            padding: "1.25rem",
+            fontSize: "0.875rem",
+            background: "#f9fafb",
+            margin: 0,
+            borderRadius: 0,
+          }}
+          codeTagProps={{
+            className: "font-mono",
+          }}
+        >
+          {code}
+        </SyntaxHighlighter>
+        <CopyButton text={code} />
+      </div>
+    </div>
+    {explanation && (
+      <div className="mt-2 text-sm text-gray-500 dark:text-gray-400 pl-2">
+        {explanation}
+      </div>
+    )}
+  </motion.div>
+);
+
+const TopicCard = ({ topic, id, onClick }) => (
+  <motion.div
+    whileHover={{ y: -2 }}
+    whileTap={{ scale: 0.98 }}
+    onClick={() => onClick(id)}
+    className="cursor-pointer rounded-xl border border-gray-200 bg-white dark:border-gray-700 dark:bg-gray-800 p-6 shadow-sm hover:shadow-md transition-all"
+  >
+    <h3 className="text-lg font-semibold text-gray-800 dark:text-white">
+      {topic.meta.title}
+    </h3>
+    <p className="mt-2 text-sm text-gray-500 dark:text-gray-400">
+      {topic.meta.description}
+    </p>
+    <div className="mt-4 flex items-center gap-2">
+      <Badge level={topic.meta.difficulty} />
+      <span className="text-xs text-gray-400 dark:text-gray-500">
+        {topic.meta.duration} min read
+      </span>
+    </div>
+  </motion.div>
+);
+// Add this new component near your other UI components (Badge, CopyButton, etc.)
+const TableBlock = ({ headers, rows }) => (
+  <motion.div
+    initial={{ opacity: 0, y: 10 }}
+    animate={{ opacity: 1, y: 0 }}
+    transition={{ duration: 0.3 }}
+    className="my-6 overflow-x-auto"
+  >
+    <table className="w-full border-collapse rounded-lg overflow-hidden shadow-sm">
+      <thead className="bg-gray-100 dark:bg-gray-700">
+        <tr>
+          {headers.map((header, index) => (
+            <th
+              key={index}
+              className="px-4 py-3 text-left text-sm font-medium text-gray-700 dark:text-gray-300 border-b border-gray-200 dark:border-gray-600"
+            >
+              {header}
+            </th>
+          ))}
+        </tr>
+      </thead>
+      <tbody className="divide-y divide-gray-200 dark:divide-gray-700">
+        {rows.map((row, rowIndex) => (
+          <tr
+            key={rowIndex}
+            className="bg-white dark:bg-gray-800 hover:bg-gray-50 dark:hover:bg-gray-700 transition-colors"
+          >
+            {row.map((cell, cellIndex) => (
+              <td
+                key={cellIndex}
+                className="px-4 py-3 text-sm text-gray-700 dark:text-gray-300 border-b border-gray-200 dark:border-gray-700"
+              >
+                {cell}
+              </td>
+            ))}
+          </tr>
+        ))}
+      </tbody>
+    </table>
+  </motion.div>
+);
+
+// Main App Component
+export default function App() {
+  const [darkMode, setDarkMode] = useState(false);
+  const [currentTopicId, setCurrentTopicId] = useState(null);
+  const [isLoading, setIsLoading] = useState(false);
+
+  useEffect(() => {
+    const mediaQuery = window.matchMedia("(prefers-color-scheme: dark)");
+    setDarkMode(mediaQuery.matches);
+
+    const handler = (e) => setDarkMode(e.matches);
+    mediaQuery.addEventListener("change", handler);
+    return () => mediaQuery.removeEventListener("change", handler);
+  }, []);
+
+  const currentTopic = currentTopicId ? topics[currentTopicId] : null;
+
+  const handleTopicSelect = (topicId) => {
+    setIsLoading(true);
+    setCurrentTopicId(topicId);
+    setTimeout(() => setIsLoading(false), 300);
+  };
+
+  return (
+    <div className={`min-h-screen ${darkMode ? "dark" : ""}`}>
+      <div className="min-h-screen bg-gray-50 text-gray-900 dark:bg-gray-900 dark:text-gray-100 transition-colors duration-200">
+        {/* Header */}
+        <header className="sticky top-0 z-10 bg-white/80 dark:bg-gray-800/80 backdrop-blur border-b border-gray-200 dark:border-gray-700 transition-colors duration-200">
+          <div className="container mx-auto px-4 py-4 flex justify-between items-center">
+            <h1 className="text-xl font-bold flex items-center gap-2">
+              <span className="bg-blue-500 text-white p-1.5 rounded-lg">
+                <svg
+                  xmlns="http://www.w3.org/2000/svg"
+                  className="h-5 w-5"
+                  viewBox="0 0 20 20"
+                  fill="currentColor"
+                >
+                  <path d="M9 4.804A7.968 7.968 0 005.5 4c-1.255 0-2.443.29-3.5.804v10A7.969 7.969 0 015.5 14c1.669 0 3.218.51 4.5 1.385A7.962 7.962 0 0114.5 14c1.255 0 2.443.29 3.5.804v-10A7.968 7.968 0 0014.5 4c-1.255 0-2.443.29-3.5.804V12a1 1 0 11-2 0V4.804z" />
+                </svg>
+              </span>
+              <span className="text-gray-800 dark:text-white">DevNotes</span>
+            </h1>
+            <button
+              onClick={() => setDarkMode(!darkMode)}
+              className="p-2 rounded-lg hover:bg-gray-100 dark:hover:bg-gray-700 transition-colors"
+              aria-label="Toggle theme"
+            >
+              {darkMode ? (
+                <svg
+                  xmlns="http://www.w3.org/2000/svg"
+                  className="h-5 w-5 text-yellow-300"
+                  viewBox="0 0 20 20"
+                  fill="currentColor"
+                >
+                  <path
+                    fillRule="evenodd"
+                    d="M10 2a1 1 0 011 1v1a1 1 0 11-2 0V3a1 1 0 011-1zm4 8a4 4 0 11-8 0 4 4 0 018 0zm-.464 4.95l.707.707a1 1 0 001.414-1.414l-.707-.707a1 1 0 00-1.414 1.414zm2.12-10.607a1 1 0 010 1.414l-.706.707a1 1 0 11-1.414-1.414l.707-.707a1 1 0 011.414 0zM17 11a1 1 0 100-2h-1a1 1 0 100 2h1zm-7 4a1 1 0 011 1v1a1 1 0 11-2 0v-1a1 1 0 011-1zM5.05 6.464A1 1 0 106.465 5.05l-.708-.707a1 1 0 00-1.414 1.414l.707.707zm1.414 8.486l-.707.707a1 1 0 01-1.414-1.414l.707-.707a1 1 0 011.414 1.414zM4 11a1 1 0 100-2H3a1 1 0 000 2h1z"
+                    clipRule="evenodd"
+                  />
+                </svg>
+              ) : (
+                <svg
+                  xmlns="http://www.w3.org/2000/svg"
+                  className="h-5 w-5 text-gray-600"
+                  viewBox="0 0 20 20"
+                  fill="currentColor"
+                >
+                  <path d="M17.293 13.293A8 8 0 016.707 2.707a8.001 8.001 0 1010.586 10.586z" />
+                </svg>
+              )}
+            </button>
+          </div>
+        </header>
+
+        {/* Main Content */}
+        <main className="container mx-auto px-4 py-8">
+          <AnimatePresence mode="wait">
+            {isLoading ? (
+              <motion.div
+                key="loader"
+                initial={{ opacity: 0 }}
+                animate={{ opacity: 1 }}
+                exit={{ opacity: 0 }}
+                className="flex justify-center items-center h-64"
+              >
+                <div className="animate-spin rounded-full h-12 w-12 border-t-2 border-b-2 border-blue-500"></div>
+              </motion.div>
+            ) : !currentTopic ? (
+              <motion.div
+                key="topic-list"
+                initial={{ opacity: 0 }}
+                animate={{ opacity: 1 }}
+                exit={{ opacity: 0 }}
+                className="max-w-4xl mx-auto"
+              >
+                <div className="mb-8 text-center">
+                  <h2 className="text-3xl font-bold text-gray-800 dark:text-white">
+                    Java Learning Notes
+                  </h2>
+                  <p className="mt-2 text-gray-500 dark:text-gray-400">
+                    Select a topic to start learning
+                  </p>
+                </div>
+
+                <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+                  {Object.entries(topics).map(([id, topic]) => (
+                    <TopicCard
+                      key={id}
+                      id={id}
+                      topic={topic}
+                      onClick={handleTopicSelect}
+                    />
+                  ))}
+                </div>
+              </motion.div>
+            ) : (
+              <motion.div
+                key="topic-content"
+                initial={{ opacity: 0 }}
+                animate={{ opacity: 1 }}
+                exit={{ opacity: 0 }}
+                className="max-w-4xl mx-auto"
+              >
+                <motion.button
+                  onClick={() => setCurrentTopicId(null)}
+                  whileHover={{ x: -2 }}
+                  className="flex items-center gap-2 mb-6 text-sm text-blue-600 hover:text-blue-700 dark:text-blue-400 dark:hover:text-blue-300"
+                >
+                  <svg
+                    xmlns="http://www.w3.org/2000/svg"
+                    className="h-4 w-4"
+                    fill="none"
+                    viewBox="0 0 24 24"
+                    stroke="currentColor"
+                  >
+                    <path
+                      strokeLinecap="round"
+                      strokeLinejoin="round"
+                      strokeWidth={2}
+                      d="M10 19l-7-7m0 0l7-7m-7 7h18"
+                    />
+                  </svg>
+                  Back to all topics
+                </motion.button>
+
+                <motion.article
+                  initial={{ opacity: 0 }}
+                  animate={{ opacity: 1 }}
+                  className="prose prose-sm sm:prose dark:prose-invert max-w-none"
+                >
+                  <h1 className="text-3xl font-bold text-gray-800 dark:text-white mb-2">
+                    {currentTopic.meta.title}
+                  </h1>
+                  <p className="text-lg text-gray-500 dark:text-gray-400 mb-8">
+                    {currentTopic.meta.description}
+                  </p>
+
+                  {currentTopic.content.map((block, index) => {
+                    switch (block.type) {
+                      case "heading":
+                        return (
+                          <motion.h2
+                            key={index}
+                            initial={{ opacity: 0, y: 10 }}
+                            animate={{ opacity: 1, y: 0 }}
+                            transition={{ delay: index * 0.05 }}
+                            className={`text-${
+                              block.level === 1 ? "3xl" : "2xl"
+                            } font-semibold mt-8 mb-4 text-gray-800 dark:text-white`}
+                          >
+                            {block.text}
+                          </motion.h2>
+                        );
+                      case "code":
+                        return <CodeBlock key={index} {...block} />;
+                      case "paragraph":
+                        return (
+                          <motion.p
+                            key={index}
+                            initial={{ opacity: 0, y: 10 }}
+                            animate={{ opacity: 1, y: 0 }}
+                            transition={{ delay: index * 0.05 }}
+                            className="my-4 text-gray-700 dark:text-gray-300 leading-relaxed"
+                          >
+                            {block.text}
+                          </motion.p>
+                        );
+                      case "table":
+                        return (
+                          <TableBlock
+                            key={index}
+                            headers={block.headers}
+                            rows={block.rows}
+                          />
+                        );
+
+                      case "alert":
+                        return (
+                          <motion.div
+                            key={index}
+                            initial={{ opacity: 0, y: 10 }}
+                            animate={{ opacity: 1, y: 0 }}
+                            transition={{ delay: index * 0.05 }}
+                            className={`p-4 rounded-lg my-4 ${
+                              block.variant === "info"
+                                ? "bg-blue-50 text-blue-800 dark:bg-blue-900/20 dark:text-blue-300"
+                                : block.variant === "warning"
+                                ? "bg-yellow-50 text-yellow-800 dark:bg-yellow-900/20 dark:text-yellow-300"
+                                : "bg-red-50 text-red-800 dark:bg-red-900/20 dark:text-red-300"
+                            }`}
+                          >
+                            {block.content}
+                          </motion.div>
+                        );
+                      default:
+                        return null;
+                    }
+                  })}
+                </motion.article>
+              </motion.div>
+            )}
+          </AnimatePresence>
+        </main>
+
+        {/* Footer */}
+        <footer className="py-6 border-t border-gray-200 dark:border-gray-700 mt-12">
+          <div className="container mx-auto px-4 text-center text-sm text-gray-500 dark:text-gray-400">
+            © {new Date().getFullYear()} Java Notes App · Made with ❤️ for
+            developers
+          </div>
+        </footer>
+      </div>
+    </div>
+  );
+}
