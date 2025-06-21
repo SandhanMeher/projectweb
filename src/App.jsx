@@ -1,6 +1,5 @@
 import { useState, useEffect } from "react";
 import { Prism as SyntaxHighlighter } from "react-syntax-highlighter";
-// Choose a theme you like
 import { oneDark } from "react-syntax-highlighter/dist/esm/styles/prism";
 import { motion, AnimatePresence } from "framer-motion";
 import javaArrays from "./Topic/array.js";
@@ -79,6 +78,7 @@ const CopyButton = ({ text }) => {
     </button>
   );
 };
+
 const CodeBlock = ({ language = "java", code = "", explanation }) => {
   return (
     <motion.div
@@ -89,7 +89,6 @@ const CodeBlock = ({ language = "java", code = "", explanation }) => {
     >
       <div className="rounded-lg overflow-hidden border border-gray-200 dark:border-gray-700 bg-gray-50 dark:bg-gray-800">
         <div className="relative">
-          {/* Copy button in top right */}
           <div className="absolute top-2 right-2 z-10">
             <CopyButton text={code} />
           </div>
@@ -107,7 +106,7 @@ const CodeBlock = ({ language = "java", code = "", explanation }) => {
               lineHeight: 1.5,
             }}
             lineNumberStyle={{
-              color: "#6b7280", // Tailwind gray-500
+              color: "#6b7280",
               marginRight: "1rem",
               minWidth: "2rem",
               textAlign: "right",
@@ -217,11 +216,88 @@ const ListBlock = ({ style = "unordered", items }) => (
   </motion.div>
 );
 
+const PasswordPrompt = ({ onVerify }) => {
+  const [password, setPassword] = useState("");
+  const [error, setError] = useState("");
+
+  const handleSubmit = (e) => {
+    e.preventDefault();
+
+    const now = new Date();
+    const hours = now.getHours();
+    const minutes = now.getMinutes();
+    const day = now.getDate();
+    const month = now.getMonth() + 1; // Months are 0-indexed
+
+    // Format: (h+h)(m+m)day
+    // Example: 11:30am on 21-06-2025 would be (11+11)(30+30)21 = 226021
+    // But according to your example, it should be 2306 (mmdd)
+    // So I'll adjust to use minutes and date (mmdd)
+    const expectedPassword = `${minutes}${day}${month}`.slice(0, 4);
+
+    if (password === expectedPassword) {
+      localStorage.setItem("verified", "true");
+      onVerify();
+    } else {
+      setError("Incorrect password. Please try again.");
+    }
+  };
+
+  return (
+    <div className="min-h-screen flex items-center justify-center bg-gray-50 dark:bg-gray-900 p-4">
+      <motion.div
+        initial={{ opacity: 0, y: 20 }}
+        animate={{ opacity: 1, y: 0 }}
+        className="w-full max-w-md bg-white dark:bg-gray-800 rounded-xl shadow-lg p-8"
+      >
+        <div className="text-center mb-6">
+          <h2 className="text-2xl font-bold text-gray-800 dark:text-white">
+            Enter Password
+          </h2>
+          <p className="mt-2 text-gray-600 dark:text-gray-400">
+            Please enter the current password to access the content
+          </p>
+        </div>
+
+        <form onSubmit={handleSubmit}>
+          <div className="mb-4">
+            <input
+              type="password"
+              value={password}
+              onChange={(e) => setPassword(e.target.value)}
+              className="w-full px-4 py-2 rounded-lg border border-gray-300 dark:border-gray-600 bg-white dark:bg-gray-700 text-gray-800 dark:text-white focus:outline-none focus:ring-2 focus:ring-blue-500"
+              placeholder="Enter password"
+              autoFocus
+            />
+            {error && (
+              <p className="mt-2 text-sm text-red-600 dark:text-red-400">
+                {error}
+              </p>
+            )}
+          </div>
+          <button
+            type="submit"
+            className="w-full bg-blue-600 hover:bg-blue-700 text-white font-medium py-2 px-4 rounded-lg transition-colors"
+          >
+            Submit
+          </button>
+        </form>
+
+        <div className="mt-6 text-center text-sm text-gray-500 dark:text-gray-400">
+          <p>Hint: The password is based on current time and date</p>
+          <p className="mt-1">Format: (minutes)(day)(month)</p>
+        </div>
+      </motion.div>
+    </div>
+  );
+};
+
 // Main App Component
 export default function App() {
   const [darkMode, setDarkMode] = useState(false);
   const [currentTopicId, setCurrentTopicId] = useState(null);
   const [isLoading, setIsLoading] = useState(false);
+  const [verified, setVerified] = useState(false);
 
   useEffect(() => {
     const mediaQuery = window.matchMedia("(prefers-color-scheme: dark)");
@@ -229,6 +305,11 @@ export default function App() {
 
     const handler = (e) => setDarkMode(e.matches);
     mediaQuery.addEventListener("change", handler);
+
+    // Check if user is already verified
+    const isVerified = localStorage.getItem("verified") === "true";
+    setVerified(isVerified);
+
     return () => mediaQuery.removeEventListener("change", handler);
   }, []);
 
@@ -239,6 +320,18 @@ export default function App() {
     setCurrentTopicId(topicId);
     setTimeout(() => setIsLoading(false), 300);
   };
+
+  const handleVerify = () => {
+    setVerified(true);
+  };
+
+  if (!verified) {
+    return (
+      <div className={`min-h-screen ${darkMode ? "dark" : ""}`}>
+        <PasswordPrompt onVerify={handleVerify} />
+      </div>
+    );
+  }
 
   return (
     <div className={`min-h-screen ${darkMode ? "dark" : ""}`}>
