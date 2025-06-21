@@ -283,10 +283,7 @@ const PasswordPrompt = ({ onVerify }) => {
           </button>
         </form>
 
-        <div className="mt-6 text-center text-sm text-gray-500 dark:text-gray-400">
-          <p>Hint: The password is based on current time and date</p>
-          <p className="mt-1">Format: (minutes)(day)(month)</p>
-        </div>
+       
       </motion.div>
     </div>
   );
