@@ -565,8 +565,7 @@ export default function App() {
                         component: HibernateIcon,
                       },
                       { icon: "mysql", name: "MySQL", component: MySqlIcon },
-                      { icon: "jsf", name: "JSF", component: JsfIcon },
-                      { icon: "jsp", name: "JSP", component: JspIcon },
+
                       {
                         icon: "servlet",
                         name: "Servlet",
@@ -574,10 +573,10 @@ export default function App() {
                       },
                       { icon: "spring", name: "Spring", component: SpringIcon },
                     ].map((tech, index) => {
-                      const angle = (index * 360) / 7; // 7 technologies
-                      const radius = 160; // Distance from center
+                      const angle = (index * 360) / 5; // 7 technologies
+                      const radius = 150; // Distance from center
                       const x = Math.cos((angle * Math.PI) / 180) * radius;
-                      const y = Math.sin((angle * Math.PI) / 180) * radius;
+                      const y = Math.sin((angle * Math.PI) / 180) * radius ;
 
                       return (
                         <motion.div
@@ -766,6 +765,5 @@ export default function App() {
     </div>
   );
 }
-
 
 // Icons
