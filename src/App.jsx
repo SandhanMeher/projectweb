@@ -1,6 +1,7 @@
 import { useState, useEffect } from "react";
-import Highlight, { defaultProps } from "prism-react-renderer";
-import theme from 'prism-react-renderer/themes/github';
+import { Prism as SyntaxHighlighter } from "react-syntax-highlighter";
+// Choose a theme you like
+import { oneDark } from "react-syntax-highlighter/dist/esm/styles/prism";
 import { motion, AnimatePresence } from "framer-motion";
 import javaArrays from "./Topic/array.js";
 import javaHibernate from "./Topic/hibernate-intro.js";
@@ -74,8 +75,7 @@ const CopyButton = ({ text }) => {
     </button>
   );
 };
-
-const CodeBlock = ({ language = "java", code, explanation }) => {
+const CodeBlock = ({ language = "java", code = "", explanation }) => {
   return (
     <motion.div
       initial={{ opacity: 0, y: 10 }}
@@ -85,46 +85,35 @@ const CodeBlock = ({ language = "java", code, explanation }) => {
     >
       <div className="rounded-lg overflow-hidden border border-gray-200 dark:border-gray-700 bg-gray-50 dark:bg-gray-800">
         <div className="relative">
-          <Highlight
-            {...defaultProps}
-            code={code.trim()}
+          {/* Copy button in top right */}
+          <div className="absolute top-2 right-2 z-10">
+            <CopyButton text={code} />
+          </div>
+
+          <SyntaxHighlighter
             language={language}
-            theme={theme}
+            style={oneDark}
+            showLineNumbers
+            customStyle={{
+              fontSize: "0.875rem",
+              fontFamily: '"Fira Code", monospace',
+              margin: 0,
+              padding: "1rem",
+              backgroundColor: "transparent",
+              lineHeight: 1.5,
+            }}
+            lineNumberStyle={{
+              color: "#6b7280", // Tailwind gray-500
+              marginRight: "1rem",
+              minWidth: "2rem",
+              textAlign: "right",
+            }}
           >
-            {({ className, style, tokens, getLineProps, getTokenProps }) => (
-              <pre
-                className={`${className} p-4 text-sm overflow-x-auto`}
-                style={{
-                  ...style,
-                  fontFamily: '"Fira Code", monospace',
-                  lineHeight: "1.5",
-                  margin: 0,
-                }}
-              >
-                <code className={`language-${language}`}>
-                  {tokens.map((line, i) => (
-                    <div
-                      key={i}
-                      {...getLineProps({ line, key: i })}
-                      className="flex"
-                    >
-                      <span className="inline-block w-8 text-right pr-4 text-gray-400 dark:text-gray-500 select-none">
-                        {i + 1}
-                      </span>
-                      <span className="flex-1">
-                        {line.map((token, key) => (
-                          <span key={key} {...getTokenProps({ token, key })} />
-                        ))}
-                      </span>
-                    </div>
-                  ))}
-                </code>
-              </pre>
-            )}
-          </Highlight>
-          <CopyButton text={code} />
+            {code.trim()}
+          </SyntaxHighlighter>
         </div>
       </div>
+
       {explanation && (
         <div className="mt-2 text-sm text-gray-500 dark:text-gray-400 pl-2">
           {explanation}
