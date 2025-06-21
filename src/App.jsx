@@ -6,12 +6,14 @@ import { motion, AnimatePresence } from "framer-motion";
 import javaArrays from "./Topic/array.js";
 import javaHibernate from "./Topic/hibernate-intro.js";
 import strings from "./Topic/strings.js";
+import javaJsf from "./Topic/jsf.js";
 
 // Topics mapping with IDs as keys
 const topics = {
   "java-arrays": javaArrays,
   "java-hibernate": javaHibernate,
   "java-strings": strings,
+  "java-jsf": javaJsf,
 };
 
 // UI Components
