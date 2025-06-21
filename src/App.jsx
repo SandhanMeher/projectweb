@@ -1,6 +1,6 @@
 import { useState, useEffect } from "react";
-import { Light as SyntaxHighlighter } from "react-syntax-highlighter";
-import { docco } from "react-syntax-highlighter/dist/esm/styles/hljs";
+import Highlight, { defaultProps } from "prism-react-renderer";
+import theme from 'prism-react-renderer/themes/github';
 import { motion, AnimatePresence } from "framer-motion";
 import javaArrays from "./Topic/array.js";
 import javaHibernate from "./Topic/hibernate-intro.js";
@@ -75,41 +75,64 @@ const CopyButton = ({ text }) => {
   );
 };
 
-const CodeBlock = ({ language, code, explanation }) => (
-  <motion.div
-    initial={{ opacity: 0, y: 10 }}
-    animate={{ opacity: 1, y: 0 }}
-    transition={{ duration: 0.3 }}
-    className="my-6 group relative"
-  >
-    <div className="rounded-xl overflow-hidden border border-gray-200 bg-gray-50 dark:border-gray-700 dark:bg-gray-800">
-      <div className="relative">
-        <SyntaxHighlighter
-          language={language}
-          style={docco}
-          customStyle={{
-            padding: "1.25rem",
-            fontSize: "0.875rem",
-            background: "#f9fafb",
-            margin: 0,
-            borderRadius: 0,
-          }}
-          codeTagProps={{
-            className: "font-mono",
-          }}
-        >
-          {code}
-        </SyntaxHighlighter>
-        <CopyButton text={code} />
+const CodeBlock = ({ language = "java", code, explanation }) => {
+  return (
+    <motion.div
+      initial={{ opacity: 0, y: 10 }}
+      animate={{ opacity: 1, y: 0 }}
+      transition={{ duration: 0.3 }}
+      className="my-6 group relative"
+    >
+      <div className="rounded-lg overflow-hidden border border-gray-200 dark:border-gray-700 bg-gray-50 dark:bg-gray-800">
+        <div className="relative">
+          <Highlight
+            {...defaultProps}
+            code={code.trim()}
+            language={language}
+            theme={theme}
+          >
+            {({ className, style, tokens, getLineProps, getTokenProps }) => (
+              <pre
+                className={`${className} p-4 text-sm overflow-x-auto`}
+                style={{
+                  ...style,
+                  fontFamily: '"Fira Code", monospace',
+                  lineHeight: "1.5",
+                  margin: 0,
+                }}
+              >
+                <code className={`language-${language}`}>
+                  {tokens.map((line, i) => (
+                    <div
+                      key={i}
+                      {...getLineProps({ line, key: i })}
+                      className="flex"
+                    >
+                      <span className="inline-block w-8 text-right pr-4 text-gray-400 dark:text-gray-500 select-none">
+                        {i + 1}
+                      </span>
+                      <span className="flex-1">
+                        {line.map((token, key) => (
+                          <span key={key} {...getTokenProps({ token, key })} />
+                        ))}
+                      </span>
+                    </div>
+                  ))}
+                </code>
+              </pre>
+            )}
+          </Highlight>
+          <CopyButton text={code} />
+        </div>
       </div>
-    </div>
-    {explanation && (
-      <div className="mt-2 text-sm text-gray-500 dark:text-gray-400 pl-2">
-        {explanation}
-      </div>
-    )}
-  </motion.div>
-);
+      {explanation && (
+        <div className="mt-2 text-sm text-gray-500 dark:text-gray-400 pl-2">
+          {explanation}
+        </div>
+      )}
+    </motion.div>
+  );
+};
 
 const TopicCard = ({ topic, id, onClick }) => (
   <motion.div
@@ -132,7 +155,7 @@ const TopicCard = ({ topic, id, onClick }) => (
     </div>
   </motion.div>
 );
-// Add this new component near your other UI components (Badge, CopyButton, etc.)
+
 const TableBlock = ({ headers, rows }) => (
   <motion.div
     initial={{ opacity: 0, y: 10 }}
@@ -174,6 +197,33 @@ const TableBlock = ({ headers, rows }) => (
   </motion.div>
 );
 
+const ListBlock = ({ style = "unordered", items }) => (
+  <motion.div
+    initial={{ opacity: 0, y: 10 }}
+    animate={{ opacity: 1, y: 0 }}
+    transition={{ duration: 0.3 }}
+    className="my-4"
+  >
+    {style === "unordered" ? (
+      <ul className="list-disc pl-5 space-y-1">
+        {items.map((item, index) => (
+          <li key={index} className="text-gray-700 dark:text-gray-300">
+            {item}
+          </li>
+        ))}
+      </ul>
+    ) : (
+      <ol className="list-decimal pl-5 space-y-1">
+        {items.map((item, index) => (
+          <li key={index} className="text-gray-700 dark:text-gray-300">
+            {item}
+          </li>
+        ))}
+      </ol>
+    )}
+  </motion.div>
+);
+
 // Main App Component
 export default function App() {
   const [darkMode, setDarkMode] = useState(false);
@@ -200,7 +250,6 @@ export default function App() {
   return (
     <div className={`min-h-screen ${darkMode ? "dark" : ""}`}>
       <div className="min-h-screen bg-gray-50 text-gray-900 dark:bg-gray-900 dark:text-gray-100 transition-colors duration-200">
-        {/* Header */}
         <header className="sticky top-0 z-10 bg-white/80 dark:bg-gray-800/80 backdrop-blur border-b border-gray-200 dark:border-gray-700 transition-colors duration-200">
           <div className="container mx-auto px-4 py-4 flex justify-between items-center">
             <h1 className="text-xl font-bold flex items-center gap-2">
@@ -248,7 +297,6 @@ export default function App() {
           </div>
         </header>
 
-        {/* Main Content */}
         <main className="container mx-auto px-4 py-8">
           <AnimatePresence mode="wait">
             {isLoading ? (
@@ -349,6 +397,14 @@ export default function App() {
                         );
                       case "code":
                         return <CodeBlock key={index} {...block} />;
+                      case "list":
+                        return (
+                          <ListBlock
+                            key={index}
+                            style={block.style}
+                            items={block.items}
+                          />
+                        );
                       case "paragraph":
                         return (
                           <motion.p
@@ -369,7 +425,6 @@ export default function App() {
                             rows={block.rows}
                           />
                         );
-
                       case "alert":
                         return (
                           <motion.div
@@ -398,7 +453,6 @@ export default function App() {
           </AnimatePresence>
         </main>
 
-        {/* Footer */}
         <footer className="py-6 border-t border-gray-200 dark:border-gray-700 mt-12">
           <div className="container mx-auto px-4 text-center text-sm text-gray-500 dark:text-gray-400">
             © {new Date().getFullYear()} Java Notes App · Made with ❤️ for
