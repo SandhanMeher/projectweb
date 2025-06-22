@@ -791,7 +791,7 @@ request.setAttribute("userData", user);`
         {
             type: "code",
             language: "jsp",
-            code: `${userData.firstName} ${userData.lastName}`
+            code: "${userData.firstName} ${userData.lastName}"
         }
         , {
             type: "heading",
