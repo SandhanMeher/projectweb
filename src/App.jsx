@@ -9,6 +9,7 @@ import javaJsf from "./Topic/jsf.js";
 import servlet from "./Topic/servlet.js";
 import jsp from "./Topic/jsp";
 import collection from "./Topic/collection.js";
+import string from "./Topic/string.js";
 
 // Technology icons (replace with your actual icons)
 const JavaIcon = ({ className }) => (
@@ -108,12 +109,12 @@ const SpringIcon = ({ className }) => (
 // Topics mapping with IDs as keys
 const topics = {
   "java-arrays": javaArrays,
-  "java-hibernate": javaHibernate,
-  "java-strings": strings,
-  "java-jsf": javaJsf,
-  "java-servlet": servlet,
-  "java-jsp": jsp,
   "java-collections": collection,
+  "java-hibernate": javaHibernate,
+  "java-jsf": javaJsf,
+  "java-jsp": jsp,
+  "java-servlet": servlet,
+  "java-string": string,
 };
 
 // UI Components
