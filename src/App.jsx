@@ -7,6 +7,7 @@ import javaHibernate from "./Topic/hibernate-intro.js";
 import strings from "./Topic/strings.js";
 import javaJsf from "./Topic/jsf.js";
 import servlet from "./Topic/servlet.js";
+import jsp from "./Topic/jsp";
 
 // Technology icons (replace with your actual icons)
 const JavaIcon = ({ className }) => (
@@ -110,6 +111,7 @@ const topics = {
   "java-strings": strings,
   "java-jsf": javaJsf,
   "java-servlet": servlet,
+  "java-jsp": jsp,
 };
 
 // UI Components
