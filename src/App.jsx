@@ -98,7 +98,7 @@ const SpringIcon = ({ className }) => (
     ></path>
     <path
       fill="#5A9E4E"
-      d="M110.2 69.4c-12.5-1.8-23.4-7.6-31.3-16.7-9.1-9.1-14.9-20-16.7-31.3-.5-3.1-.7-6.3-.7-9.5 0-4.5.6-8.9 1.7-13.2-11.8-10.9-25.8-19.1-42.3-19.1-6.4 0-12.6.9-18.5 2.6-15.8 4.5-28.3 16-32.8 31.8-1.7 6-2.6 12.2-2.6 18.5 0 16.5 7.3 31.4 19.1 42.3-1.1 4.3-1.7 8.7-1.7 13.2 0 3.2.2 6.4.7 9.5 1.9 12 8.4 22 18.3 28.1 9.9 6.1 22.2 8.2 33.8 4.3 9.1-7.9 14.9-18.8 16.7-31.3.5-3.1.7-6.3.7-9.5 0-4.5-.6-8.9-1.7-13.2 10.9-11.8 19.1-25.8 19.1-42.3 0-6.4-.9-12.6-2.6-18.5z"
+      d="M52.214 126.021c22.476 1.437 57-.8 57.817-11.436 0 0-1.571 4.032-18.577 7.231-19.186 3.612-42.854 3.191-56.887.874 0 .001 2.875 2.381 17.647 3.331z"
     ></path>
   </svg>
 );
@@ -115,12 +115,9 @@ const topics = {
 // UI Components
 const Badge = ({ level = "beginner" }) => {
   const colors = {
-    beginner:
-      "bg-emerald-100 text-emerald-800 dark:bg-emerald-900/20 dark:text-emerald-300",
-    intermediate:
-      "bg-amber-100 text-amber-800 dark:bg-amber-900/20 dark:text-amber-300",
-    advanced:
-      "bg-rose-100 text-rose-800 dark:bg-rose-900/20 dark:text-rose-300",
+    beginner: "bg-emerald-900/20 text-emerald-300",
+    intermediate: "bg-amber-900/20 text-amber-300",
+    advanced: "bg-rose-900/20 text-rose-300",
   };
 
   return (
@@ -144,7 +141,7 @@ const CopyButton = ({ text }) => {
   return (
     <button
       onClick={handleCopy}
-      className="absolute top-2 right-2 p-1.5 rounded-md bg-white/90 backdrop-blur shadow-sm hover:bg-gray-50 transition-all dark:bg-gray-800/80 dark:hover:bg-gray-700/80"
+      className="absolute top-2 right-2 p-1.5 rounded-md bg-gray-800/80 backdrop-blur shadow-sm hover:bg-gray-700/80 transition-all"
       aria-label="Copy code"
     >
       <AnimatePresence mode="wait">
@@ -154,7 +151,7 @@ const CopyButton = ({ text }) => {
             initial={{ opacity: 0, y: 5 }}
             animate={{ opacity: 1, y: 0 }}
             exit={{ opacity: 0, y: -5 }}
-            className="text-xs font-medium text-emerald-600 dark:text-emerald-400"
+            className="text-xs font-medium text-emerald-400"
           >
             Copied!
           </motion.span>
@@ -164,7 +161,7 @@ const CopyButton = ({ text }) => {
             initial={{ opacity: 0, y: 5 }}
             animate={{ opacity: 1, y: 0 }}
             exit={{ opacity: 0, y: -5 }}
-            className="text-gray-500 hover:text-gray-700 dark:text-gray-400 dark:hover:text-gray-200"
+            className="text-gray-400 hover:text-gray-200"
           >
             ⎘
           </motion.span>
@@ -182,7 +179,7 @@ const CodeBlock = ({ language = "java", code = "", explanation }) => {
       transition={{ duration: 0.3 }}
       className="my-6 group relative"
     >
-      <div className="rounded-lg overflow-hidden border border-gray-200 dark:border-gray-700 bg-gray-50 dark:bg-gray-800">
+      <div className="rounded-lg overflow-hidden border border-gray-700 bg-gray-800">
         <div className="relative">
           <div className="absolute top-2 right-2 z-10">
             <CopyButton text={code} />
@@ -213,9 +210,7 @@ const CodeBlock = ({ language = "java", code = "", explanation }) => {
       </div>
 
       {explanation && (
-        <div className="mt-2 text-sm text-gray-500 dark:text-gray-400 pl-2">
-          {explanation}
-        </div>
+        <div className="mt-2 text-sm text-gray-400 pl-2">{explanation}</div>
       )}
     </motion.div>
   );
@@ -226,17 +221,13 @@ const TopicCard = ({ topic, id, onClick }) => (
     whileHover={{ y: -2, scale: 1.02 }}
     whileTap={{ scale: 0.98 }}
     onClick={() => onClick(id)}
-    className="cursor-pointer rounded-xl border border-gray-200 bg-white dark:border-gray-700 dark:bg-gray-800 p-6 shadow-sm hover:shadow-md transition-all"
+    className="cursor-pointer rounded-xl border border-gray-700 bg-gray-800 p-6 shadow-sm hover:shadow-md transition-all"
   >
-    <h3 className="text-lg font-semibold text-gray-800 dark:text-white">
-      {topic.meta.title}
-    </h3>
-    <p className="mt-2 text-sm text-gray-500 dark:text-gray-400">
-      {topic.meta.description}
-    </p>
+    <h3 className="text-lg font-semibold text-white">{topic.meta.title}</h3>
+    <p className="mt-2 text-sm text-gray-400">{topic.meta.description}</p>
     <div className="mt-4 flex items-center gap-2">
       <Badge level={topic.meta.difficulty} />
-      <span className="text-xs text-gray-400 dark:text-gray-500">
+      <span className="text-xs text-gray-500">
         {topic.meta.duration} min read
       </span>
     </div>
@@ -251,28 +242,28 @@ const TableBlock = ({ headers, rows }) => (
     className="my-6 overflow-x-auto"
   >
     <table className="w-full border-collapse rounded-lg overflow-hidden shadow-sm">
-      <thead className="bg-gray-100 dark:bg-gray-700">
+      <thead className="bg-gray-700">
         <tr>
           {headers.map((header, index) => (
             <th
               key={index}
-              className="px-4 py-3 text-left text-sm font-medium text-gray-700 dark:text-gray-300 border-b border-gray-200 dark:border-gray-600"
+              className="px-4 py-3 text-left text-sm font-medium text-gray-300 border-b border-gray-600"
             >
               {header}
             </th>
           ))}
         </tr>
       </thead>
-      <tbody className="divide-y divide-gray-200 dark:divide-gray-700">
+      <tbody className="divide-y divide-gray-700">
         {rows.map((row, rowIndex) => (
           <tr
             key={rowIndex}
-            className="bg-white dark:bg-gray-800 hover:bg-gray-50 dark:hover:bg-gray-700 transition-colors"
+            className="bg-gray-800 hover:bg-gray-700 transition-colors"
           >
             {row.map((cell, cellIndex) => (
               <td
                 key={cellIndex}
-                className="px-4 py-3 text-sm text-gray-700 dark:text-gray-300 border-b border-gray-200 dark:border-gray-700"
+                className="px-4 py-3 text-sm text-gray-300 border-b border-gray-700"
               >
                 {cell}
               </td>
@@ -294,7 +285,7 @@ const ListBlock = ({ style = "unordered", items }) => (
     {style === "unordered" ? (
       <ul className="list-disc pl-5 space-y-1">
         {items.map((item, index) => (
-          <li key={index} className="text-gray-700 dark:text-gray-300">
+          <li key={index} className="text-gray-300">
             {item}
           </li>
         ))}
@@ -302,7 +293,7 @@ const ListBlock = ({ style = "unordered", items }) => (
     ) : (
       <ol className="list-decimal pl-5 space-y-1">
         {items.map((item, index) => (
-          <li key={index} className="text-gray-700 dark:text-gray-300">
+          <li key={index} className="text-gray-300">
             {item}
           </li>
         ))}
@@ -335,17 +326,15 @@ const PasswordPrompt = ({ onVerify }) => {
   };
 
   return (
-    <div className="min-h-screen flex items-center justify-center bg-gray-50 dark:bg-gray-900 p-4">
+    <div className="min-h-screen flex items-center justify-center bg-gray-900 p-4">
       <motion.div
         initial={{ opacity: 0, y: 20 }}
         animate={{ opacity: 1, y: 0 }}
-        className="w-full max-w-md bg-white dark:bg-gray-800 rounded-xl shadow-lg p-8"
+        className="w-full max-w-md bg-gray-800 rounded-xl shadow-lg p-8"
       >
         <div className="text-center mb-6">
-          <h2 className="text-2xl font-bold text-gray-800 dark:text-white">
-            Enter Password
-          </h2>
-          <p className="mt-2 text-gray-600 dark:text-gray-400">
+          <h2 className="text-2xl font-bold text-white">Enter Password</h2>
+          <p className="mt-2 text-gray-400">
             Please enter the current password to access the content
           </p>
         </div>
@@ -356,15 +345,11 @@ const PasswordPrompt = ({ onVerify }) => {
               type="password"
               value={password}
               onChange={(e) => setPassword(e.target.value)}
-              className="w-full px-4 py-2 rounded-lg border border-gray-300 dark:border-gray-600 bg-white dark:bg-gray-700 text-gray-800 dark:text-white focus:outline-none focus:ring-2 focus:ring-blue-500"
+              className="w-full px-4 py-2 rounded-lg border border-gray-600 bg-gray-700 text-white focus:outline-none focus:ring-2 focus:ring-blue-500"
               placeholder="Enter password"
               autoFocus
             />
-            {error && (
-              <p className="mt-2 text-sm text-red-600 dark:text-red-400">
-                {error}
-              </p>
-            )}
+            {error && <p className="mt-2 text-sm text-red-400">{error}</p>}
           </div>
           <button
             type="submit"
@@ -374,7 +359,7 @@ const PasswordPrompt = ({ onVerify }) => {
           </button>
         </form>
 
-        <div className="mt-6 text-center text-sm text-gray-500 dark:text-gray-400">
+        <div className="mt-6 text-center text-sm text-gray-400">
           <p>Hint: The password is based on current time and date</p>
           <p className="mt-1">Format: (minutes)(day)(month)</p>
         </div>
@@ -385,22 +370,13 @@ const PasswordPrompt = ({ onVerify }) => {
 
 // Main App Component
 export default function App() {
-  const [darkMode, setDarkMode] = useState(false);
   const [currentTopicId, setCurrentTopicId] = useState(null);
   const [isLoading, setIsLoading] = useState(false);
   const [verified, setVerified] = useState(false);
 
   useEffect(() => {
-    const mediaQuery = window.matchMedia("(prefers-color-scheme: dark)");
-    setDarkMode(mediaQuery.matches);
-
-    const handler = (e) => setDarkMode(e.matches);
-    mediaQuery.addEventListener("change", handler);
-
     const isVerified = localStorage.getItem("verified") === "true";
     setVerified(isVerified);
-
-    return () => mediaQuery.removeEventListener("change", handler);
   }, []);
 
   const currentTopic = currentTopicId ? topics[currentTopicId] : null;
@@ -417,16 +393,16 @@ export default function App() {
 
   if (!verified) {
     return (
-      <div className={`min-h-screen ${darkMode ? "dark" : ""}`}>
+      <div className="min-h-screen dark">
         <PasswordPrompt onVerify={handleVerify} />
       </div>
     );
   }
 
   return (
-    <div className={`min-h-screen ${darkMode ? "dark" : ""}`}>
-      <div className="min-h-screen bg-gray-50 text-gray-900 dark:bg-gray-900 dark:text-gray-100 transition-colors duration-200">
-        <header className="sticky top-0 z-50 bg-white/80 dark:bg-gray-900/80 backdrop-blur-lg border-b border-gray-100 dark:border-gray-800 transition-colors duration-300 shadow-sm">
+    <div className="min-h-screen dark">
+      <div className="min-h-screen bg-gray-900 text-gray-100">
+        <header className="sticky top-0 z-50 bg-gray-900/80 backdrop-blur-lg border-b border-gray-800 transition-colors duration-300 shadow-sm">
           <div className="container mx-auto px-4 sm:px-6 lg:px-8">
             <div className="flex justify-between items-center h-16">
               <div className="flex items-center">
@@ -450,43 +426,9 @@ export default function App() {
                       />
                     </svg>
                   </div>
-                  <span className="text-lg font-bold bg-clip-text text-transparent bg-gradient-to-r from-blue-600 to-blue-400 dark:from-blue-400 dark:to-blue-300">
+                  <span className="text-lg font-bold bg-clip-text text-transparent bg-gradient-to-r from-blue-400 to-blue-300">
                     DevNotes
                   </span>
-                </motion.button>
-              </div>
-
-              <div className="flex items-center space-x-4">
-                <motion.button
-                  whileHover={{ scale: 1.1 }}
-                  whileTap={{ scale: 0.95 }}
-                  onClick={() => setDarkMode(!darkMode)}
-                  className="p-2 rounded-full bg-gray-100 dark:bg-gray-800 hover:bg-gray-200 dark:hover:bg-gray-700 transition-all duration-200 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-opacity-50"
-                  aria-label="Toggle theme"
-                >
-                  {darkMode ? (
-                    <svg
-                      xmlns="http://www.w3.org/2000/svg"
-                      className="h-5 w-5 text-yellow-300"
-                      viewBox="0 0 20 20"
-                      fill="currentColor"
-                    >
-                      <path
-                        fillRule="evenodd"
-                        d="M10 2a1 1 0 011 1v1a1 1 0 11-2 0V3a1 1 0 011-1zm4 8a4 4 0 11-8 0 4 4 0 018 0zm-.464 4.95l.707.707a1 1 0 001.414-1.414l-.707-.707a1 1 0 00-1.414 1.414zm2.12-10.607a1 1 0 010 1.414l-.706.707a1 1 0 11-1.414-1.414l.707-.707a1 1 0 011.414 0zM17 11a1 1 0 100-2h-1a1 1 0 100 2h1zm-7 4a1 1 0 011 1v1a1 1 0 11-2 0v-1a1 1 0 011-1zM5.05 6.464A1 1 0 106.465 5.05l-.708-.707a1 1 0 00-1.414 1.414l.707.707zm1.414 8.486l-.707.707a1 1 0 01-1.414-1.414l.707-.707a1 1 0 011.414 1.414zM4 11a1 1 0 100-2H3a1 1 0 000 2h1z"
-                        clipRule="evenodd"
-                      />
-                    </svg>
-                  ) : (
-                    <svg
-                      xmlns="http://www.w3.org/2000/svg"
-                      className="h-5 w-5 text-gray-600"
-                      viewBox="0 0 20 20"
-                      fill="currentColor"
-                    >
-                      <path d="M17.293 13.293A8 8 0 016.707 2.707a8.001 8.001 0 1010.586 10.586z" />
-                    </svg>
-                  )}
                 </motion.button>
               </div>
             </div>
@@ -523,7 +465,7 @@ export default function App() {
                       className="inline-flex items-center justify-center mb-4"
                     >
                       <div className="w-2 h-2 rounded-full bg-blue-500 mr-2"></div>
-                      <span className="text-sm font-medium text-blue-600 dark:text-blue-400">
+                      <span className="text-sm font-medium text-blue-400">
                         JAVA LEARNING RESOURCES
                       </span>
                       <div className="w-2 h-2 rounded-full bg-blue-500 ml-2"></div>
@@ -533,7 +475,7 @@ export default function App() {
                       initial={{ opacity: 0, y: 10 }}
                       animate={{ opacity: 1, y: 0 }}
                       transition={{ duration: 0.5, delay: 0.1 }}
-                      className="text-4xl md:text-5xl font-bold bg-clip-text text-transparent bg-gradient-to-r from-gray-800 to-gray-600 dark:from-gray-100 dark:to-gray-300 mb-4"
+                      className="text-4xl md:text-5xl font-bold bg-clip-text text-transparent bg-gradient-to-r from-gray-100 to-gray-300 mb-4"
                     >
                       Master Java Development
                     </motion.h2>
@@ -542,12 +484,12 @@ export default function App() {
                       initial={{ opacity: 0, y: 10 }}
                       animate={{ opacity: 1, y: 0 }}
                       transition={{ duration: 0.5, delay: 0.2 }}
-                      className="text-lg md:text-xl text-gray-500 dark:text-gray-400 max-w-2xl mx-auto leading-relaxed"
+                      className="text-lg md:text-xl text-gray-400 max-w-2xl mx-auto leading-relaxed"
                     >
                       Select from our curated collection of topics to enhance
                       your Java skills and
                       <span className="relative mx-1">
-                        <span className="absolute inset-x-0 bottom-1 h-2 bg-blue-100 dark:bg-blue-900/50 opacity-70 -z-10"></span>
+                        <span className="absolute inset-x-0 bottom-1 h-2 bg-blue-900/50 opacity-70 -z-10"></span>
                         <span className="relative">
                           boost your productivity
                         </span>
@@ -565,7 +507,6 @@ export default function App() {
                         component: HibernateIcon,
                       },
                       { icon: "mysql", name: "MySQL", component: MySqlIcon },
-
                       {
                         icon: "servlet",
                         name: "Servlet",
@@ -573,10 +514,10 @@ export default function App() {
                       },
                       { icon: "spring", name: "Spring", component: SpringIcon },
                     ].map((tech, index) => {
-                      const angle = (index * 360) / 5; // 7 technologies
-                      const radius = 150; // Distance from center
+                      const angle = (index * 360) / 5;
+                      const radius = 150;
                       const x = Math.cos((angle * Math.PI) / 180) * radius;
-                      const y = Math.sin((angle * Math.PI) / 180) * radius ;
+                      const y = Math.sin((angle * Math.PI) / 180) * radius;
 
                       return (
                         <motion.div
@@ -604,7 +545,7 @@ export default function App() {
                             whileHover={{ scale: 1.2 }}
                           >
                             <motion.div
-                              className="absolute inset-0 rounded-full bg-blue-500/20 dark:bg-blue-400/20"
+                              className="absolute inset-0 rounded-full bg-blue-400/20"
                               animate={{
                                 scale: [1, 1.3, 1],
                                 opacity: [0.3, 0.6, 0.3],
@@ -615,9 +556,9 @@ export default function App() {
                                 ease: "easeInOut",
                               }}
                             />
-                            <div className="relative z-10 bg-white dark:bg-gray-800 p-3 rounded-xl shadow-lg border border-gray-200 dark:border-gray-700 flex flex-col items-center">
+                            <div className="relative z-10 bg-gray-800 p-3 rounded-xl shadow-lg border border-gray-700 flex flex-col items-center">
                               <tech.component className="h-8 w-8" />
-                              <span className="text-xs mt-1 text-gray-600 dark:text-gray-300">
+                              <span className="text-xs mt-1 text-gray-300">
                                 {tech.name}
                               </span>
                             </div>
@@ -650,7 +591,7 @@ export default function App() {
                 <motion.button
                   onClick={() => setCurrentTopicId(null)}
                   whileHover={{ x: -2 }}
-                  className="flex items-center gap-2 mb-6 text-sm text-blue-600 hover:text-blue-700 dark:text-blue-400 dark:hover:text-blue-300"
+                  className="flex items-center gap-2 mb-6 text-sm text-blue-400 hover:text-blue-300"
                 >
                   <svg
                     xmlns="http://www.w3.org/2000/svg"
@@ -674,10 +615,10 @@ export default function App() {
                   animate={{ opacity: 1 }}
                   className="prose prose-sm sm:prose dark:prose-invert max-w-none"
                 >
-                  <h1 className="text-3xl font-bold text-gray-800 dark:text-white mb-2">
+                  <h1 className="text-3xl font-bold text-white mb-2">
                     {currentTopic.meta.title}
                   </h1>
-                  <p className="text-lg text-gray-500 dark:text-gray-400 mb-8">
+                  <p className="text-lg text-gray-400 mb-8">
                     {currentTopic.meta.description}
                   </p>
 
@@ -692,7 +633,7 @@ export default function App() {
                             transition={{ delay: index * 0.05 }}
                             className={`text-${
                               block.level === 1 ? "3xl" : "2xl"
-                            } font-semibold mt-8 mb-4 text-gray-800 dark:text-white`}
+                            } font-semibold mt-8 mb-4 text-white`}
                           >
                             {block.text}
                           </motion.h2>
@@ -714,7 +655,7 @@ export default function App() {
                             initial={{ opacity: 0, y: 10 }}
                             animate={{ opacity: 1, y: 0 }}
                             transition={{ delay: index * 0.05 }}
-                            className="my-4 text-gray-700 dark:text-gray-300 leading-relaxed"
+                            className="my-4 text-gray-300 leading-relaxed"
                           >
                             {block.text}
                           </motion.p>
@@ -736,10 +677,10 @@ export default function App() {
                             transition={{ delay: index * 0.05 }}
                             className={`p-4 rounded-lg my-4 ${
                               block.variant === "info"
-                                ? "bg-blue-50 text-blue-800 dark:bg-blue-900/20 dark:text-blue-300"
+                                ? "bg-blue-900/20 text-blue-300"
                                 : block.variant === "warning"
-                                ? "bg-yellow-50 text-yellow-800 dark:bg-yellow-900/20 dark:text-yellow-300"
-                                : "bg-red-50 text-red-800 dark:bg-red-900/20 dark:text-red-300"
+                                ? "bg-yellow-900/20 text-yellow-300"
+                                : "bg-red-900/20 text-red-300"
                             }`}
                           >
                             {block.content}
@@ -755,8 +696,8 @@ export default function App() {
           </AnimatePresence>
         </main>
 
-        <footer className="py-6 border-t border-gray-200 dark:border-gray-700 mt-12">
-          <div className="container mx-auto px-4 text-center text-sm text-gray-500 dark:text-gray-400">
+        <footer className="py-6 border-t border-gray-700 mt-12">
+          <div className="container mx-auto px-4 text-center text-sm text-gray-400">
             © {new Date().getFullYear()} Java Notes App · Made with ❤️ for
             developers
           </div>
@@ -765,5 +706,3 @@ export default function App() {
     </div>
   );
 }
-
-// Icons
