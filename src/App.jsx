@@ -8,6 +8,7 @@ import strings from "./Topic/strings.js";
 import javaJsf from "./Topic/jsf.js";
 import servlet from "./Topic/servlet.js";
 import jsp from "./Topic/jsp";
+import collection from "./Topic/collection.js";
 
 // Technology icons (replace with your actual icons)
 const JavaIcon = ({ className }) => (
@@ -112,6 +113,7 @@ const topics = {
   "java-jsf": javaJsf,
   "java-servlet": servlet,
   "java-jsp": jsp,
+  "java-collections": collection,
 };
 
 // UI Components
