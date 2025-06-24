@@ -4,12 +4,12 @@ import { oneDark } from "react-syntax-highlighter/dist/esm/styles/prism";
 import { motion, AnimatePresence } from "framer-motion";
 import javaArrays from "./Topic/array.js";
 import javaHibernate from "./Topic/hibernate-intro.js";
-import strings from "./Topic/strings.js";
 import javaJsf from "./Topic/jsf.js";
 import servlet from "./Topic/servlet.js";
 import jsp from "./Topic/jsp";
 import collection from "./Topic/collection.js";
 import string from "./Topic/string.js";
+import ejb from "./Topic/ejb.js";
 
 // Technology icons (replace with your actual icons)
 const JavaIcon = ({ className }) => (
@@ -115,6 +115,7 @@ const topics = {
   "java-jsp": jsp,
   "java-servlet": servlet,
   "java-string": string,
+  "java-ejb":ejb,
 };
 
 // UI Components
