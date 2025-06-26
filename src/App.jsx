@@ -12,6 +12,7 @@ import string from "./Topic/string.js";
 import ejb from "./Topic/ejb.js";
 import sql from "./Topic/sql.js";
 import stream from "./Topic/stream.js";
+import exceptionHandling from "./Topic/exceptionHandling.js";
 
 // Technology icons (replace with your actual icons)
 const JavaIcon = ({ className }) => (
@@ -118,6 +119,7 @@ const topics = {
   "java-servlet": servlet,
   "java-string": string,
   "java-ejb":ejb,
+  "java-exception-handling": exceptionHandling,
   "java-sql": sql,
   "java-stream": stream,
 };
