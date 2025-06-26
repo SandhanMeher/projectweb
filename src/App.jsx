@@ -13,6 +13,8 @@ import ejb from "./Topic/ejb.js";
 import sql from "./Topic/sql.js";
 import stream from "./Topic/stream.js";
 import exceptionHandling from "./Topic/exceptionHandling.js";
+import javaTricky from "./Topic/javaTricky.js";
+import javanote from "./Topic/javanote.js";
 
 // Technology icons (replace with your actual icons)
 const JavaIcon = ({ className }) => (
@@ -122,6 +124,8 @@ const topics = {
   "java-exception-handling": exceptionHandling,
   "java-sql": sql,
   "java-stream": stream,
+  "java-tricky": javaTricky,
+  "java-note": javanote,
 };
 
 // UI Components
