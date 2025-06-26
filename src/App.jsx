@@ -11,6 +11,7 @@ import collection from "./Topic/collection.js";
 import string from "./Topic/string.js";
 import ejb from "./Topic/ejb.js";
 import sql from "./Topic/sql.js";
+import stream from "./Topic/stream.js";
 
 // Technology icons (replace with your actual icons)
 const JavaIcon = ({ className }) => (
@@ -118,6 +119,7 @@ const topics = {
   "java-string": string,
   "java-ejb":ejb,
   "java-sql": sql,
+  "java-stream": stream,
 };
 
 // UI Components
