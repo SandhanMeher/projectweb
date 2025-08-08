@@ -15,6 +15,7 @@ import stream from "./Topic/stream.js";
 import exceptionHandling from "./Topic/exceptionHandling.js";
 import javaTricky from "./Topic/javaTricky.js";
 import javanote from "./Topic/javanote.js";
+import selenium from "./Topic/selenium.js"
 
 // Technology icons (replace with your actual icons)
 const JavaIcon = ({ className }) => (
@@ -126,6 +127,7 @@ const topics = {
   "java-stream": stream,
   "java-tricky": javaTricky,
   "java-note": javanote,
+  "selenium":selenium
 };
 
 // UI Components
@@ -290,7 +292,42 @@ const TableBlock = ({ headers, rows }) => (
     </table>
   </motion.div>
 );
-
+const ExternalLinkBlock = ({ text, url }) => {
+  return (
+    <motion.div
+      initial={{ opacity: 0, y: 10 }}
+      animate={{ opacity: 1, y: 0 }}
+      transition={{ duration: 0.3 }}
+      className="my-4"
+    >
+      <a
+        href={url}
+        target="_blank" // Opens link in a new tab
+        rel="noopener noreferrer" // Security best practice for target="_blank"
+        className="inline-flex items-center gap-2 px-4 py-2 rounded-lg bg-blue-600 hover:bg-blue-700 text-white font-medium transition-colors shadow-md"
+      >
+        <span>{text}</span>
+        {/* External link icon (Lucide React icon, if available, or simple SVG) */}
+        <svg
+          xmlns="http://www.w3.org/2000/svg"
+          width="16"
+          height="16"
+          viewBox="0 0 24 24"
+          fill="none"
+          stroke="currentColor"
+          strokeWidth="2"
+          strokeLinecap="round"
+          strokeLinejoin="round"
+          className="lucide lucide-external-link"
+        >
+          <path d="M18 13v6a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h6" />
+          <polyline points="15 3 21 3 21 9" />
+          <line x1="10" x2="21" y1="14" y2="3" />
+        </svg>
+      </a>
+    </motion.div>
+  );
+};
 const ListBlock = ({ style = "unordered", items }) => (
   <motion.div
     initial={{ opacity: 0, y: 10 }}
@@ -701,6 +738,14 @@ export default function App() {
                           >
                             {block.content}
                           </motion.div>
+                        );
+                         case "externalLink":
+                        return (
+                          <ExternalLinkBlock
+                            key={index}
+                            text={block.text}
+                            url={block.url}
+                          />
                         );
                       default:
                         return null;
