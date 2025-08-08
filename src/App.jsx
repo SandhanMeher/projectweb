@@ -190,6 +190,8 @@ const CopyButton = ({ text }) => {
 };
 
 const CodeBlock = ({ language = "java", code = "", explanation }) => {
+  const [isOpen, setIsOpen] = useState(false);
+
   return (
     <motion.div
       initial={{ opacity: 0, y: 10 }}
@@ -197,43 +199,54 @@ const CodeBlock = ({ language = "java", code = "", explanation }) => {
       transition={{ duration: 0.3 }}
       className="my-6 group relative"
     >
-      <div className="rounded-lg overflow-hidden border border-gray-700 bg-gray-800">
-        <div className="relative">
-          <div className="absolute top-2 right-2 z-10">
-            <CopyButton text={code} />
+      {/* Toggle Button */}
+      <button
+        onClick={() => setIsOpen(!isOpen)}
+        className="w-full text-left bg-gray-700 text-white px-4 py-2 rounded-t-lg font-mono text-sm"
+      >
+        {isOpen ? "▼ Hide Code" : "▶ Show Code"}
+      </button>
+
+      {/* Collapsible Code Block */}
+      {isOpen && (
+        <div className="rounded-b-lg overflow-hidden border border-t-0 border-gray-700 bg-gray-800">
+          <div className="relative">
+            <div className="absolute top-2 right-2 z-10">
+              <CopyButton text={code} />
+            </div>
+
+            <SyntaxHighlighter
+              language={language}
+              style={oneDark}
+              showLineNumbers
+              customStyle={{
+                fontSize: "0.875rem",
+                fontFamily: '"Fira Code", monospace',
+                margin: 0,
+                padding: "1rem",
+                backgroundColor: "transparent",
+                lineHeight: 1.5,
+              }}
+              lineNumberStyle={{
+                color: "#6b7280",
+                marginRight: "1rem",
+                minWidth: "2rem",
+                textAlign: "right",
+              }}
+            >
+              {code.trim()}
+            </SyntaxHighlighter>
           </div>
-
-          <SyntaxHighlighter
-            language={language}
-            style={oneDark}
-            showLineNumbers
-            customStyle={{
-              fontSize: "0.875rem",
-              fontFamily: '"Fira Code", monospace',
-              margin: 0,
-              padding: "1rem",
-              backgroundColor: "transparent",
-              lineHeight: 1.5,
-            }}
-            lineNumberStyle={{
-              color: "#6b7280",
-              marginRight: "1rem",
-              minWidth: "2rem",
-              textAlign: "right",
-            }}
-          >
-            {code.trim()}
-          </SyntaxHighlighter>
         </div>
-      </div>
+      )}
 
+      {/* Optional Explanation */}
       {explanation && (
         <div className="mt-2 text-sm text-gray-400 pl-2">{explanation}</div>
       )}
     </motion.div>
   );
 };
-
 const TopicCard = ({ topic, id, onClick }) => (
   <motion.div
     whileHover={{ y: -2, scale: 1.02 }}
